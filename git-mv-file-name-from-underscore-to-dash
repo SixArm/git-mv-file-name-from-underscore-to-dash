@@ -3,12 +3,15 @@
 # git mv file name from underscore to dash
 #
 # Example: from "foo_goo_hoo.md" to "foo-goo-hoo.md"
-
+#
+# If the file name doesn't change, then skip it.
+#
 while read file; do
-    file_dirname=$(dirname "$file_name")
-    file_basename_original=$(basename "$file_name")
+    file_dirname=$(dirname "$file")
+    file_basename=$(basename "$file")
     file_basename_with_dash=${file_basename_original//_/-}
-    if [ "$file_basename_original" != "$file_basename_with_dash" ]; then
-        git mv "$dir/$file_basename_original" "$dir/$file_basename_with_dash"
+    if [ "$file_basename" = "$file_basename_with_dash" ]; then
+        continue
     fi
+    git mv "$file_dirname/$file_basename" "$file_dirname/$file_basename_with_dash"
 done
